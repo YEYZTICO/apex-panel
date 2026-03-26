@@ -717,9 +717,12 @@ async function loadStatus() {
     });
     const data = await r.json();
     
-    // Update stats
-    const botActivo = data.bot_activo !== undefined ? data.bot_activo : data.activo;
-    const totalUsers = data.total_usuarios || data.usuarios || 0;
+    // Update stats - server returns config.bot_activo and bots_online
+    const botActivo = (data.config && data.config.bot_activo !== undefined) 
+                      ? data.config.bot_activo 
+                      : data.bot_activo;
+    const botsOnline = data.bots_online || 0;
+    const totalLicencias = data.activas || data.total_licencias || 0;
     
     const estadoEl = document.getElementById('stat-estado');
     if (botActivo) {
@@ -730,13 +733,13 @@ async function loadStatus() {
       estadoEl.className = 'stat-value red';
     }
     
-    document.getElementById('stat-usuarios').textContent = totalUsers;
+    document.getElementById('stat-usuarios').textContent = botsOnline;
     
     // Log
     log.innerHTML = `
       <div class="log-line success">✅ Servidor Online — Railway</div>
       <div class="log-line">Bot Global: ${botActivo ? '▶ ACTIVO' : '■ PAUSADO'}</div>
-      <div class="log-line">Usuarios registrados: ${totalUsers}</div>
+      <div class="log-line">Bots online: ${botsOnline} | Licencias activas: ${totalLicencias}</div>
       <div class="log-line info">URL: ${SERVER}</div>
     `;
   } catch(e) {
@@ -782,12 +785,12 @@ async function loadResultados() {
     
     list.innerHTML = resultados.map(u => {
       const nombre = u.licencia || u.nombre || u.id || 'Usuario';
-      const profit = parseFloat(u.ganancia_dia || u.profit || u.pnl || 0);
+      const profit = parseFloat(u.ganancia || u.ganancia_dia || u.profit || u.pnl || 0);
       const wins = parseInt(u.wins || u.w || 0);
       const total = parseInt(u.total_trades || u.total || u.t || 0);
       const wr = total > 0 ? Math.round((wins/total)*100) : 0;
       const activo = u.activo || u.online || false;
-      const hora = u.ultimo_reporte ? new Date(u.ultimo_reporte*1000).toLocaleTimeString('es-CR') : '--:--';
+      const hora = u.updated_at ? new Date(u.updated_at).toLocaleTimeString('es-CR') : '--:--';
       
       totalPnl += profit;
       totalWins += wins;
