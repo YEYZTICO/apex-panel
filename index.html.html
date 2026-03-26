@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX TITAN — Panel Admin</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;700;800&display=swap');
+  :root {
+    --bg:#060810; --surface:#0d1117; --card:#111827; --border:#1f2937;
+    --accent:#3b82f6; --green:#10b981; --red:#ef4444; --yellow:#f59e0b;
+    --text:#e2e8f0; --muted:#64748b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(59,130,246,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+  .wrap{max-width:1300px;margin:0 auto;padding:24px;position:relative;z-index:1;}
+
+  /* Header */
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+  .logo{display:flex;align-items:center;gap:12px;}
+  .logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+  .logo-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+  .logo-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+  .header-inputs{display:flex;gap:8px;align-items:center;}
+  input.hdr{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:inherit;font-size:12px;}
+  input.hdr:focus{outline:none;border-color:var(--accent);}
+  input.url{width:280px;} input.key{width:180px;}
+
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden;}
+  .stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+  .stat.b::before{background:var(--accent);} .stat.g::before{background:var(--green);}
+  .stat.r::before{background:var(--red);}   .stat.y::before{background:var(--yellow);}
+  .stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+  .stat-val{font-size:30px;font-weight:700;font-family:'Syne',sans-serif;margin:6px 0 2px;}
+  .stat-val.b{color:var(--accent);} .stat-val.g{color:var(--green);}
+  .stat-val.r{color:var(--red);}   .stat-val.y{color:var(--yellow);}
+
+  /* Grid */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  .full{grid-column:1/-1;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .card-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .card-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+  .card-body{padding:18px;}
+
+  /* Bot toggle */
+  .bot-row{display:flex;align-items:center;gap:14px;background:var(--surface);border-radius:10px;padding:16px;margin-bottom:14px;}
+  .switch{position:relative;width:52px;height:26px;cursor:pointer;}
+  .switch input{display:none;}
+  .slider{position:absolute;inset:0;background:var(--border);border-radius:26px;transition:.3s;}
+  .slider::before{content:'';position:absolute;width:18px;height:18px;left:4px;top:4px;background:#fff;border-radius:50%;transition:.3s;}
+  .switch input:checked+.slider{background:var(--green);}
+  .switch input:checked+.slider::before{transform:translateX(26px);}
+  .tog-info h3{font-size:13px;font-weight:500;}
+  .tog-info p{font-size:11px;color:var(--muted);margin-top:2px;}
+
+  /* Form */
+  .fgrp{margin-bottom:12px;}
+  .flbl{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
+  .finp{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:inherit;font-size:12px;transition:border-color .2s;}
+  .finp:focus{outline:none;border-color:var(--accent);}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+  /* Buttons */
+  .btn{padding:9px 16px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all .2s;}
+  .btn-p{background:var(--accent);color:#fff;} .btn-p:hover{opacity:.85;}
+  .btn-s{background:var(--green);color:#fff;}  .btn-s:hover{opacity:.85;}
+  .btn-d{background:var(--red);color:#fff;}    .btn-d:hover{opacity:.85;}
+  .btn-g{background:transparent;border:1px solid var(--border);color:var(--muted);}
+  .btn-g:hover{border-color:var(--accent);color:var(--accent);}
+  .btn-y{background:var(--yellow);color:#000;} .btn-y:hover{opacity:.85;}
+  .btn-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+
+  /* Table */
+  table{width:100%;border-collapse:collapse;}
+  th{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);}
+  td{padding:10px 12px;font-size:12px;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle;}
+  tr:hover td{background:rgba(59,130,246,.03);}
+  .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500;}
+  .bg{background:rgba(16,185,129,.15);color:var(--green);}
+  .br{background:rgba(239,68,68,.15);color:var(--red);}
+  .by{background:rgba(245,158,11,.15);color:var(--yellow);}
+  .bb{background:rgba(59,130,246,.15);color:var(--accent);}
+
+  /* Results */
+  .results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+  .rcard{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;}
+  .rcard-user{font-size:12px;font-weight:500;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+  .rstat{font-size:11px;color:var(--muted);margin:3px 0;}
+  .rstat span{color:var(--text);}
+
+  /* Toast */
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:12px;display:none;z-index:999;}
+  .toast.show{display:block;animation:up .3s ease;}
+  .toast.ok{border-color:var(--green);color:var(--green);}
+  .toast.err{border-color:var(--red);color:var(--red);}
+  @keyframes up{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+
+  .sep{height:1px;background:var(--border);margin:14px 0;}
+  .txt-muted{font-size:11px;color:var(--muted);}
+  .online-count{font-size:11px;color:var(--green);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <div>
+        <div class="logo-name">APEX TITAN</div>
+        <div class="logo-sub">Panel de Control — Admin</div>
+      </div>
+    </div>
+    <div class="header-inputs">
+      <input class="hdr url" id="serverUrl" placeholder="https://tu-servidor.railway.app" value="">
+      <input class="hdr key" id="adminKey" type="password" placeholder="Admin key" value="APEX-ADMIN-2025">
+      <button class="btn btn-p" onclick="cargarStatus()">Conectar</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat b"><div class="stat-lbl">Bots Online</div><div class="stat-val b" id="s-online">--</div></div>
+    <div class="stat g"><div class="stat-lbl">Licencias Activas</div><div class="stat-val g" id="s-activas">--</div></div>
+    <div class="stat y"><div class="stat-lbl">Total Licencias</div><div class="stat-val y" id="s-total">--</div></div>
+    <div class="stat r"><div class="stat-lbl">Bot Global</div><div class="stat-val r" id="s-botstate">--</div></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Control del bot -->
+    <div class="card">
+      <div class="card-hdr">
+        <span class="card-title">⚡ Control Global del Bot</span>
+        <span class="txt-muted" id="last-update">--</span>
+      </div>
+      <div class="card-body">
+        <div class="bot-row">
+          <label class="switch">
+            <input type="checkbox" id="botActivo" checked onchange="toggleBot()">
+            <span class="slider"></span>
+          </label>
+          <div class="tog-info">
+            <h3 id="bot-status-text">Bot Activo</h3>
+            <p>Todos los usuarios reciben este estado</p>
+          </div>
+        </div>
+
+        <div class="fgrp">
+          <label class="flbl">Mensaje para usuarios</label>
+          <input class="finp" id="mensaje" value="Bot activo — buen trading!">
+        </div>
+
+        <div class="sep"></div>
+        <div class="frow3">
+          <div class="fgrp">
+            <label class="flbl">Risk %</label>
+            <input class="finp" id="risk" type="number" value="1.0" step="0.1">
+          </div>
+          <div class="fgrp">
+            <label class="flbl">Daily Profit %</label>
+            <input class="finp" id="daily_profit" type="number" value="5.0" step="0.5">
+          </div>
+          <div class="fgrp">
+            <label class="flbl">Daily Loss %</label>
+            <input class="finp" id="daily_loss" type="number" value="3.0" step="0.5">
+          </div>
+        </div>
+        <div class="frow3">
+          <div class="fgrp">
+            <label class="flbl">Cooldown (s)</label>
+            <input class="finp" id="cooldown" type="number" value="120">
+          </div>
+          <div class="fgrp">
+            <label class="flbl">SL (pts)</label>
+            <input class="finp" id="sl_pts" type="number" value="10">
+          </div>
+          <div class="fgrp">
+            <label class="flbl">TP Multiplier</label>
+            <input class="finp" id="tp_mult" type="number" value="3.5" step="0.5">
+          </div>
+        </div>
+        <div class="fgrp">
+          <label class="flbl">Versión del bot</label>
+          <input class="finp" id="version" value="1.0.0">
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-s" onclick="guardarConfig()">💾 Guardar Config</button>
+          <button class="btn btn-g" onclick="cargarStatus()">🔄 Actualizar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gestión de licencias -->
+    <div class="card">
+      <div class="card-hdr">
+        <span class="card-title">🔑 Gestión de Licencias</span>
+      </div>
+      <div class="card-body">
+        <div class="frow">
+          <div class="fgrp">
+            <label class="flbl">Licencia</label>
+            <input class="finp" id="nueva-lic" placeholder="APEX-USER-XXXX">
+          </div>
+          <div class="fgrp">
+            <label class="flbl">Nombre usuario</label>
+            <input class="finp" id="nueva-nombre" placeholder="Juan García">
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fgrp">
+            <label class="flbl">Plan</label>
+            <select class="finp" id="nueva-plan">
+              <option value="basic">Basic</option>
+              <option value="pro">Pro</option>
+              <option value="vip">VIP</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:flex-end;padding-bottom:12px;">
+            <button class="btn btn-s" style="width:100%" onclick="agregarLicencia()">➕ Agregar</button>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+        <div style="max-height:280px;overflow-y:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Licencia</th>
+                <th>Plan</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-licencias">
+              <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Conecta el servidor para ver licencias</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resultados en tiempo real -->
+    <div class="card full">
+      <div class="card-hdr">
+        <span class="card-title">📊 Resultados en Tiempo Real</span>
+        <span class="online-count" id="online-label">0 bots activos</span>
+      </div>
+      <div class="card-body">
+        <div class="results-grid" id="results-grid">
+          <div style="color:var(--muted);font-size:12px;">Conecta el servidor para ver resultados...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = () => document.getElementById('serverUrl').value.replace(/\/$/, '');
+  const KEY = () => document.getElementById('adminKey').value;
+
+  function toast(msg, tipo='ok') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast show ${tipo}`;
+    setTimeout(() => t.className = 'toast', 3000);
+  }
+
+  async function cargarStatus() {
+    try {
+      const r = await fetch(`${API()}/admin/status`, {
+        headers: { 'X-Admin-Key': KEY() }
+      });
+      if (!r.ok) { toast('Error de conexión o clave incorrecta', 'err'); return; }
+      const d = await r.json();
+
+      document.getElementById('s-online').textContent  = d.bots_online;
+      document.getElementById('s-activas').textContent = d.activas;
+      document.getElementById('s-total').textContent   = d.total_licencias;
+
+      const cfg = d.config;
+      document.getElementById('s-botstate').textContent = cfg.bot_activo ? 'ACTIVO' : 'DETENIDO';
+      document.getElementById('s-botstate').style.color = cfg.bot_activo ? 'var(--green)' : 'var(--red)';
+      document.getElementById('botActivo').checked = cfg.bot_activo;
+      document.getElementById('bot-status-text').textContent = cfg.bot_activo ? '● Bot Activo' : '● Bot Detenido';
+      document.getElementById('mensaje').value      = cfg.mensaje;
+      document.getElementById('risk').value         = cfg.risk_percent;
+      document.getElementById('daily_profit').value = cfg.daily_profit;
+      document.getElementById('daily_loss').value   = cfg.daily_loss;
+      document.getElementById('cooldown').value     = cfg.cooldown;
+      document.getElementById('sl_pts').value       = cfg.sl_pts;
+      document.getElementById('tp_mult').value      = cfg.tp_multiplier;
+      document.getElementById('version').value      = cfg.version;
+      document.getElementById('last-update').textContent = 'Actualizado: ' + new Date().toLocaleTimeString();
+
+      toast('✅ Conectado correctamente');
+      await cargarLicencias();
+      await cargarResultados();
+    } catch(e) {
+      toast('No se pudo conectar al servidor', 'err');
+    }
+  }
+
+  async function guardarConfig() {
+    try {
+      const r = await fetch(`${API()}/admin/config`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          admin_key    : KEY(),
+          bot_activo   : document.getElementById('botActivo').checked,
+          risk_percent : parseFloat(document.getElementById('risk').value),
+          daily_profit : parseFloat(document.getElementById('daily_profit').value),
+          daily_loss   : parseFloat(document.getElementById('daily_loss').value),
+          cooldown     : parseInt(document.getElementById('cooldown').value),
+          sl_pts       : parseInt(document.getElementById('sl_pts').value),
+          tp_multiplier: parseFloat(document.getElementById('tp_mult').value),
+          version      : document.getElementById('version').value,
+          mensaje      : document.getElementById('mensaje').value,
+        })
+      });
+      const d = await r.json();
+      if (d.ok) toast('✅ Configuración guardada — bots actualizarán en 30s');
+      else toast('Error al guardar', 'err');
+    } catch(e) { toast('Error de conexión', 'err'); }
+  }
+
+  async function toggleBot() {
+    const activo = document.getElementById('botActivo').checked;
+    document.getElementById('bot-status-text').textContent = activo ? '● Bot Activo' : '● Bot Detenido';
+    document.getElementById('s-botstate').textContent = activo ? 'ACTIVO' : 'DETENIDO';
+    document.getElementById('s-botstate').style.color = activo ? 'var(--green)' : 'var(--red)';
+    try {
+      await fetch(`${API()}/admin/config`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admin_key: KEY(), bot_activo: activo })
+      });
+      toast(activo ? '✅ Bot activado para todos' : '🛑 Bot detenido para todos');
+    } catch(e) {}
+  }
+
+  async function cargarLicencias() {
+    try {
+      const r = await fetch(`${API()}/admin/licencias`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admin_key: KEY(), accion: 'listar' })
+      });
+      const d = await r.json();
+      const tbody = document.getElementById('tabla-licencias');
+      const lics = d.licencias || {};
+      if (!Object.keys(lics).length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Sin licencias aún</td></tr>';
+        return;
+      }
+      tbody.innerHTML = Object.entries(lics).map(([lic, info]) => `
+        <tr>
+          <td>${info.nombre}</td>
+          <td style="color:var(--muted)">${lic.substring(0,20)}...</td>
+          <td><span class="badge bb">${info.plan}</span></td>
+          <td><span class="badge ${info.activa ? 'bg' : 'br'}">${info.activa ? 'Activa' : 'Inactiva'}</span></td>
+          <td>
+            ${info.activa
+              ? `<button class="btn btn-d" style="padding:4px 10px;font-size:10px" onclick="cambiarEstado('${lic}','desactivar')">Desactivar</button>`
+              : `<button class="btn btn-s" style="padding:4px 10px;font-size:10px" onclick="cambiarEstado('${lic}','activar')">Activar</button>`
+            }
+          </td>
+        </tr>
+      `).join('');
+    } catch(e) {}
+  }
+
+  async function agregarLicencia() {
+    const lic    = document.getElementById('nueva-lic').value.trim();
+    const nombre = document.getElementById('nueva-nombre').value.trim();
+    const plan   = document.getElementById('nueva-plan').value;
+    if (!lic || !nombre) { toast('Completa licencia y nombre', 'err'); return; }
+    try {
+      const r = await fetch(`${API()}/admin/licencias`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admin_key: KEY(), accion: 'agregar', licencia: lic, nombre, plan })
+      });
+      const d = await r.json();
+      if (d.ok) {
+        toast(`✅ Licencia ${lic} agregada`);
+        document.getElementById('nueva-lic').value = '';
+        document.getElementById('nueva-nombre').value = '';
+        await cargarLicencias();
+      }
+    } catch(e) { toast('Error', 'err'); }
+  }
+
+  async function cambiarEstado(lic, accion) {
+    try {
+      await fetch(`${API()}/admin/licencias`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admin_key: KEY(), accion, licencia: lic })
+      });
+      toast(accion === 'activar' ? '✅ Licencia activada' : '🛑 Licencia desactivada');
+      await cargarLicencias();
+    } catch(e) {}
+  }
+
+  async function cargarResultados() {
+    try {
+      const r = await fetch(`${API()}/admin/resultados`, {
+        headers: { 'X-Admin-Key': KEY() }
+      });
+      const d = await r.json();
+      const res = d.resultados || {};
+      const grid = document.getElementById('results-grid');
+      document.getElementById('online-label').textContent = Object.keys(res).length + ' bots activos';
+      if (!Object.keys(res).length) {
+        grid.innerHTML = '<div style="color:var(--muted);font-size:12px;">Sin bots reportando aún...</div>';
+        return;
+      }
+      grid.innerHTML = Object.values(res).map(r => `
+        <div class="rcard">
+          <div class="rcard-user"><span class="dot"></span>${r.usuario}</div>
+          <div class="rstat">Balance: <span>$${r.balance || '--'}</span></div>
+          <div class="rstat">Ganancia: <span style="color:${(r.ganancia||0)>=0?'var(--green)':'var(--red)'}">$${r.ganancia||'0'}</span></div>
+          <div class="rstat">W/L: <span>${r.wins||0}/${r.losses||0} (${r.wr||0}%)</span></div>
+          <div class="rstat">Posición: <span>${r.posicion||'Ninguna'}</span></div>
+          <div class="rstat" style="margin-top:6px;font-size:10px;color:var(--muted)">${r.updated_at ? new Date(r.updated_at).toLocaleTimeString() : '--'}</div>
+        </div>
+      `).join('');
+    } catch(e) {}
+  }
+
+  // Auto-refresh cada 15 segundos
+  setInterval(() => {
+    if (API()) { cargarResultados(); cargarLicencias(); }
+  }, 15000);
+</script>
+</body>
+</html>
