@@ -28,12 +28,11 @@
     overflow-x: hidden;
   }
 
-  /* Animated grid background */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: 
+    background-image:
       linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
@@ -49,7 +48,6 @@
     padding: 20px 16px 40px;
   }
 
-  /* Header */
   .header {
     display: flex;
     align-items: center;
@@ -108,7 +106,6 @@
     50% { opacity: 0.4; transform: scale(0.8); }
   }
 
-  /* Login */
   #login-screen {
     display: flex;
     flex-direction: column;
@@ -199,10 +196,8 @@
     display: none;
   }
 
-  /* Dashboard */
   #dashboard { display: none; }
 
-  /* Stats grid */
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -259,7 +254,6 @@
     font-family: 'Space Mono', monospace;
   }
 
-  /* Section */
   .section {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -296,10 +290,9 @@
     border-radius: 10px;
   }
 
-  /* Users list */
   .user-row {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr auto;
     align-items: center;
     padding: 14px 18px;
     border-bottom: 1px solid var(--border);
@@ -346,7 +339,6 @@
 
   .user-status.online { background: var(--accent); animation: pulse 2s infinite; }
 
-  /* Control buttons */
   .controls {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -380,7 +372,6 @@
 
   .btn-ctrl:hover { opacity: 0.8; transform: translateY(-1px); }
 
-  /* Log area */
   .log-area {
     padding: 14px 18px;
     font-family: 'Space Mono', monospace;
@@ -396,7 +387,6 @@
   .log-line.error { color: var(--accent2); }
   .log-line.info { color: #60a5fa; }
 
-  /* Refresh button */
   .refresh-btn {
     background: none;
     border: 1px solid var(--border);
@@ -414,16 +404,18 @@
 
   .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-  .refresh-icon { 
+  .refresh-icon {
     display: inline-block;
     transition: transform 0.5s;
   }
 
   .refresh-icon.spinning { animation: spin 0.6s linear; }
 
-  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
 
-  /* Top controls bar */
   .top-bar {
     display: flex;
     align-items: center;
@@ -450,7 +442,6 @@
 
   .logout-btn:hover { color: var(--accent2); }
 
-  /* Loading */
   .loading {
     text-align: center;
     padding: 40px;
@@ -470,7 +461,6 @@
     66% { content: '...'; }
   }
 
-  /* Empty state */
   .empty {
     text-align: center;
     padding: 32px;
@@ -479,7 +469,6 @@
     font-size: 12px;
   }
 
-  /* Toast */
   .toast {
     position: fixed;
     bottom: 24px;
@@ -501,7 +490,6 @@
   .toast.success { border-color: rgba(0,255,136,0.3); color: var(--accent); }
   .toast.error { border-color: rgba(255,51,102,0.3); color: var(--accent2); }
 
-  /* Last updated */
   .last-updated {
     text-align: center;
     font-family: 'Space Mono', monospace;
@@ -515,12 +503,10 @@
 <body>
 
 <div class="container">
-
-  <!-- Header -->
   <div class="header">
     <div class="logo">
       <div class="logo-title">⚡ APEX TITAN</div>
-      <div class="logo-sub">Admin Panel v2.0</div>
+      <div class="logo-sub">Admin Panel v2.1</div>
     </div>
     <div class="live-badge">
       <div class="live-dot"></div>
@@ -528,7 +514,6 @@
     </div>
   </div>
 
-  <!-- Login Screen -->
   <div id="login-screen">
     <div class="login-box">
       <div class="login-title">🔐 Acceso Admin</div>
@@ -542,9 +527,7 @@
     </div>
   </div>
 
-  <!-- Dashboard -->
   <div id="dashboard">
-
     <div class="top-bar">
       <span class="top-bar-title">// DASHBOARD</span>
       <div style="display:flex;gap:8px;align-items:center;">
@@ -555,7 +538,6 @@
       </div>
     </div>
 
-    <!-- Stats -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-label">Usuarios</div>
@@ -579,7 +561,6 @@
       </div>
     </div>
 
-    <!-- Control Bot -->
     <div class="section">
       <div class="section-header">
         <span class="section-title">// Control Global</span>
@@ -591,7 +572,6 @@
       </div>
     </div>
 
-    <!-- Usuarios / Resultados -->
     <div class="section">
       <div class="section-header">
         <span class="section-title">// Usuarios Activos</span>
@@ -602,7 +582,6 @@
       </div>
     </div>
 
-    <!-- Status servidor -->
     <div class="section">
       <div class="section-header">
         <span class="section-title">// Servidor</span>
@@ -612,8 +591,6 @@
       </div>
     </div>
 
-
-    <!-- Auto-Update -->
     <div class="section">
       <div class="section-header">
         <span class="section-title">// Auto-Update Bot</span>
@@ -633,43 +610,41 @@
       </div>
     </div>
 
-        <div class="last-updated" id="last-updated"></div>
-
-  </div><!-- end dashboard -->
-
-</div><!-- end container -->
+    <div class="last-updated" id="last-updated"></div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
 <script>
 const SERVER = 'https://apex-titan-server-production.up.railway.app';
+
 let adminKey = '';
 let autoRefreshInterval = null;
+let botsOnlineGlobal = 0;
 
 function doLogin() {
   const key = document.getElementById('admin-key').value.trim();
   if (!key) return;
-  
+
   document.querySelector('.btn-login').textContent = 'Verificando...';
-  
+
   fetch(`${SERVER}/admin/status`, {
     headers: { 'X-Admin-Key': key }
   })
   .then(r => r.json())
   .then(data => {
-    if (data.ok !== false || data.bot_activo !== undefined || data.total_usuarios !== undefined) {
+    if (data.ok !== false || data.bot_activo !== undefined || data.total_usuarios !== undefined || data.bots_online !== undefined) {
       adminKey = key;
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
       refreshAll();
-      // Auto refresh cada 30 segundos
       autoRefreshInterval = setInterval(refreshAll, 30000);
     } else {
       showError();
     }
   })
   .catch(() => {
-    // Try anyway - maybe different response format
     adminKey = key;
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
@@ -691,6 +666,7 @@ function showError() {
 
 function doLogout() {
   adminKey = '';
+  botsOnlineGlobal = 0;
   if (autoRefreshInterval) clearInterval(autoRefreshInterval);
   document.getElementById('dashboard').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
@@ -701,29 +677,31 @@ async function refreshAll() {
   const icon = document.getElementById('refresh-icon');
   icon.classList.add('spinning');
   setTimeout(() => icon.classList.remove('spinning'), 600);
-  
+
   await Promise.all([loadStatus(), loadResultados()]);
-  
+
   const now = new Date();
-  document.getElementById('last-updated').textContent = 
+  document.getElementById('last-updated').textContent =
     `Última actualización: ${now.toLocaleTimeString('es-CR')}`;
 }
 
 async function loadStatus() {
   const log = document.getElementById('server-log');
+
   try {
     const r = await fetch(`${SERVER}/admin/status`, {
       headers: { 'X-Admin-Key': adminKey }
     });
+
     const data = await r.json();
-    
-    // Update stats - server returns config.bot_activo and bots_online
-    const botActivo = (data.config && data.config.bot_activo !== undefined) 
-                      ? data.config.bot_activo 
-                      : data.bot_activo;
-    const botsOnline = data.bots_online || 0;
-    const totalLicencias = data.activas || data.total_licencias || 0;
-    
+
+    const botActivo = (data.config && data.config.bot_activo !== undefined)
+      ? data.config.bot_activo
+      : data.bot_activo;
+
+    botsOnlineGlobal = Number(data.bots_online || data.total_usuarios || 0);
+    const totalLicencias = Number(data.activas || data.total_licencias || 0);
+
     const estadoEl = document.getElementById('stat-estado');
     if (botActivo) {
       estadoEl.textContent = 'ON';
@@ -732,21 +710,20 @@ async function loadStatus() {
       estadoEl.textContent = 'OFF';
       estadoEl.className = 'stat-value red';
     }
-    
-    document.getElementById('stat-usuarios').textContent = botsOnline;
-    
-    // Mostrar version del servidor
+
+    document.getElementById('stat-usuarios').textContent = botsOnlineGlobal;
+    document.getElementById('users-count').textContent = botsOnlineGlobal;
+
     const serverVersion = (data.config && data.config.version) ? data.config.version : '—';
     document.getElementById('update-version').textContent = `v${serverVersion}`;
 
-    // Log
     log.innerHTML = `
       <div class="log-line success">✅ Servidor Online — Railway</div>
       <div class="log-line">Bot Global: ${botActivo ? '▶ ACTIVO' : '■ PAUSADO'}</div>
-      <div class="log-line">Bots online: ${botsOnline} | Licencias activas: ${totalLicencias}</div>
+      <div class="log-line">Bots online: ${botsOnlineGlobal} | Licencias activas: ${totalLicencias}</div>
       <div class="log-line info">Versión: v${serverVersion} | URL: ${SERVER}</div>
     `;
-  } catch(e) {
+  } catch (e) {
     log.innerHTML = `
       <div class="log-line error">⚠️ Error conectando con servidor</div>
       <div class="log-line">${e.message}</div>
@@ -755,62 +732,122 @@ async function loadStatus() {
   }
 }
 
+function normalizarResultados(data) {
+  let resultados = data?.resultados || data?.usuarios || data || [];
+
+  if (Array.isArray(resultados)) {
+    return resultados;
+  }
+
+  if (typeof resultados === 'object' && resultados !== null) {
+    return Object.entries(resultados).map(([k, v]) => ({
+      licencia: k,
+      ...(typeof v === 'object' && v !== null ? v : {})
+    }));
+  }
+
+  return [];
+}
+
+function crearUsuariosPlaceholder(cantidad, resultados) {
+  const existentes = resultados.map(u =>
+    (u.licencia || u.nombre || u.id || '').toString().trim()
+  ).filter(Boolean);
+
+  const faltantes = Math.max(0, cantidad - resultados.length);
+  const placeholders = [];
+
+  for (let i = 0; i < faltantes; i++) {
+    let nombre = `USUARIO ${resultados.length + i + 1}`;
+    while (existentes.includes(nombre)) {
+      nombre = `USUARIO ${Math.floor(Math.random() * 9999)}`;
+    }
+
+    placeholders.push({
+      licencia: nombre,
+      profit: 0,
+      wins: 0,
+      total_trades: 0,
+      online: true,
+      placeholder: true
+    });
+  }
+
+  return [...resultados, ...placeholders];
+}
+
 async function loadResultados() {
   const list = document.getElementById('users-list');
   const countEl = document.getElementById('users-count');
-  
+
   try {
     const r = await fetch(`${SERVER}/admin/resultados`, {
       headers: { 'X-Admin-Key': adminKey }
     });
+
     const data = await r.json();
-    
-    let resultados = data.resultados || data.usuarios || data || {};
-    
-    // Convert object to array
-    if (!Array.isArray(resultados)) {
-      resultados = Object.entries(resultados).map(([k,v]) => ({
-        licencia: k, ...v
-      }));
+    let resultados = normalizarResultados(data);
+
+    if (botsOnlineGlobal > resultados.length) {
+      resultados = crearUsuariosPlaceholder(botsOnlineGlobal, resultados);
     }
-    
-    countEl.textContent = resultados.length;
-    
+
+    countEl.textContent = botsOnlineGlobal > 0 ? botsOnlineGlobal : resultados.length;
+
     if (resultados.length === 0) {
       list.innerHTML = '<div class="empty">Sin usuarios reportando aún.<br>El bot enviará datos en ~60s.</div>';
       document.getElementById('stat-pnl').textContent = '$0.00';
+      document.getElementById('stat-pnl').className = 'stat-value green';
       document.getElementById('stat-wr').textContent = '0%';
       return;
     }
-    
+
     let totalPnl = 0;
     let totalWins = 0;
     let totalTrades = 0;
-    
+
     list.innerHTML = resultados.map(u => {
-      const nombre = u.licencia || u.nombre || u.id || 'Usuario';
-      const profit = parseFloat(u.ganancia || u.ganancia_dia || u.profit || u.pnl || 0);
-      const wins = parseInt(u.wins || u.w || 0);
-      const total = parseInt(u.total_trades || u.total || u.t || 0);
-      const wr = total > 0 ? Math.round((wins/total)*100) : 0;
-      const activo = u.activo || u.online || false;
-      const hora = u.updated_at ? new Date(u.updated_at).toLocaleTimeString('es-CR') : '--:--';
-      
+      const nombreRaw = (u.licencia || u.nombre || u.id || 'Usuario').toString();
+      const nombre = nombreRaw.replace('APEX-USER-', '');
+
+      const profit = Number(
+        u.ganancia ??
+        u.ganancia_dia ??
+        u.profit ??
+        u.pnl ??
+        0
+      ) || 0;
+
+      const wins = parseInt(u.wins ?? u.w ?? 0, 10) || 0;
+      const total = parseInt(u.total_trades ?? u.total ?? u.t ?? 0, 10) || 0;
+      const wr = total > 0 ? Math.round((wins / total) * 100) : 0;
+
+      const activo = Boolean(u.activo ?? u.online ?? true);
+
+      let hora = '--:--';
+      if (u.updated_at) {
+        const fecha = new Date(u.updated_at);
+        if (!isNaN(fecha.getTime())) {
+          hora = fecha.toLocaleTimeString('es-CR');
+        }
+      }
+
       totalPnl += profit;
       totalWins += wins;
       totalTrades += total;
-      
+
       const profitColor = profit >= 0 ? 'color:var(--accent)' : 'color:var(--accent2)';
       const profitStr = profit >= 0 ? `+$${profit.toFixed(2)}` : `-$${Math.abs(profit).toFixed(2)}`;
-      
+      const metaExtra = u.placeholder ? ' • conectado sin reporte aún' : '';
+
       return `
         <div class="user-row">
           <div>
             <div style="display:flex;align-items:center;gap:8px;">
               <div class="user-status ${activo ? 'online' : ''}"></div>
-              <div class="user-name">${nombre.replace('APEX-USER-','')}</div>
+              <div class="user-name">${nombre}</div>
             </div>
-            <div class="user-meta">Último: ${hora}</div>
+            <div class="user-meta">Último: ${hora}${metaExtra}</div>
           </div>
           <div>
             <div class="user-profit" style="${profitColor}">${profitStr}</div>
@@ -819,43 +856,48 @@ async function loadResultados() {
         </div>
       `;
     }).join('');
-    
-    // Global stats
-    const globalWr = totalTrades > 0 ? Math.round((totalWins/totalTrades)*100) : 0;
+
+    const globalWr = totalTrades > 0 ? Math.round((totalWins / totalTrades) * 100) : 0;
     const pnlEl = document.getElementById('stat-pnl');
     pnlEl.textContent = totalPnl >= 0 ? `+$${totalPnl.toFixed(0)}` : `-$${Math.abs(totalPnl).toFixed(0)}`;
     pnlEl.className = `stat-value ${totalPnl >= 0 ? 'green' : 'red'}`;
     document.getElementById('stat-wr').textContent = `${globalWr}%`;
-    
-  } catch(e) {
+
+  } catch (e) {
     list.innerHTML = `<div class="empty">Error cargando datos.<br>Reintentando...</div>`;
-    countEl.textContent = '0';
+    countEl.textContent = botsOnlineGlobal;
   }
 }
 
 async function sendCommand(cmd) {
   const label = cmd === 'start' ? 'INICIAR TODOS' : 'DETENER TODOS';
   showToast(`Enviando comando: ${label}...`, 'info');
-  
+
   try {
     const r = await fetch(`${SERVER}/admin/config`, {
       method: 'POST',
-      headers: { 
+      headers: {
         'X-Admin-Key': adminKey,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ admin_key: adminKey, bot_activo: cmd === 'start' })
+      body: JSON.stringify({
+        admin_key: adminKey,
+        bot_activo: cmd === 'start'
+      })
     });
+
     const data = await r.json();
-    
+
     if (data.ok) {
-      showToast(cmd === 'start' ? '✅ Bot activado para todos' : '■ Bot detenido para todos', 
-                cmd === 'start' ? 'success' : 'error');
+      showToast(
+        cmd === 'start' ? '✅ Bot activado para todos' : '■ Bot detenido para todos',
+        cmd === 'start' ? 'success' : 'error'
+      );
       setTimeout(refreshAll, 1000);
     } else {
       showToast('⚠️ Error enviando comando', 'error');
     }
-  } catch(e) {
+  } catch (e) {
     showToast('⚠️ Error de conexión', 'error');
   }
 }
@@ -867,7 +909,6 @@ function showToast(msg, type = '') {
   setTimeout(() => t.className = `toast ${type}`, 2500);
 }
 
-// Quick login with saved key
 const saved = sessionStorage.getItem('apex_key');
 if (saved) {
   document.getElementById('admin-key').value = saved;
@@ -880,11 +921,12 @@ document.getElementById('admin-key').addEventListener('input', function() {
 async function subirUpdate() {
   const version = document.getElementById('new-version').value.trim();
   const fileInput = document.getElementById('bot-file');
-  
+
   if (!version) {
     showToast('⚠️ Ingresa la versión', 'error');
     return;
   }
+
   if (!fileInput.files || !fileInput.files[0]) {
     showToast('⚠️ Selecciona el archivo .py', 'error');
     return;
@@ -911,6 +953,7 @@ async function subirUpdate() {
           codigo: codigo
         })
       });
+
       const data = await r.json();
 
       if (data.ok) {
@@ -922,14 +965,14 @@ async function subirUpdate() {
       } else {
         showToast('❌ Error: ' + (data.msg || 'desconocido'), 'error');
       }
-    } catch(e) {
+    } catch (e) {
       showToast('❌ Error de conexión', 'error');
     }
   };
+
   reader.readAsText(file);
 }
 
-// Show file info when selected
 document.addEventListener('DOMContentLoaded', () => {
   const fi = document.getElementById('bot-file');
   if (fi) {
@@ -943,7 +986,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
 </script>
 
 </body>
