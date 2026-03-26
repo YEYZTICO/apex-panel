@@ -735,12 +735,16 @@ async function loadStatus() {
     
     document.getElementById('stat-usuarios').textContent = botsOnline;
     
+    // Mostrar version del servidor
+    const serverVersion = (data.config && data.config.version) ? data.config.version : '—';
+    document.getElementById('update-version').textContent = `v${serverVersion}`;
+
     // Log
     log.innerHTML = `
       <div class="log-line success">✅ Servidor Online — Railway</div>
       <div class="log-line">Bot Global: ${botActivo ? '▶ ACTIVO' : '■ PAUSADO'}</div>
       <div class="log-line">Bots online: ${botsOnline} | Licencias activas: ${totalLicencias}</div>
-      <div class="log-line info">URL: ${SERVER}</div>
+      <div class="log-line info">Versión: v${serverVersion} | URL: ${SERVER}</div>
     `;
   } catch(e) {
     log.innerHTML = `
